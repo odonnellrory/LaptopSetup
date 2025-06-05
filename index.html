@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>AMS Setup Installer</title>
+  <meta charset="UTF-8">
+</head>
+<body>
+  <h1>Program Installer</h1>
+  <div id="package-list">
+    <label><input type="checkbox" value="googlechrome"> Google Chrome</label><br>
+    <label><input type="checkbox" value="vscode"> Visual Studio Code</label><br>
+    <label><input type="checkbox" value="slack"> Slack</label><br>
+  </div>
+  <button onclick="installSelected()">Install Selected</button>
+
+  <pre id="output"></pre>
+
+  <script src="renderer.js"></script>
+</body>
+</html>
+

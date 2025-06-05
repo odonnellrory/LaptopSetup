@@ -1,0 +1,14 @@
+[
+  {
+    "name": "Google Chrome",
+    "chocoName": "googlechrome"
+  },
+  {
+    "name": "Slack",
+    "chocoName": "slack"
+  },
+  {
+    "name": "Visual Studio Code",
+    "chocoName": "vscode"
+  }
+]

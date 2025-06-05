@@ -1,3 +1,10 @@
 node_modules
+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
 *.log
 dist/
+node_modules/
+dist/
+logs/
+*.log
+.DS_Store
+
