@@ -2,17 +2,19 @@ const { exec } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
+//find temp folder
 const tempDir = process.env.TEMP || 'C:\\Temp';
 fs.mkdirSync(tempDir, { recursive: true });
 
+//create log file
 const logPath = path.join(tempDir, 'install-log.txt');
-
 function log(msg, sendLog, logStream) {
   const line = `[${new Date().toISOString()}] ${msg}`;
   if (logStream) logStream.write(line + '\n');
   if (sendLog) sendLog(line);
 }
 
+//if no choco install choco
 function isChocolateyInstalled(callback) {
   exec('where choco', (err, stdout) => {
     callback(!err && stdout.toLowerCase().includes('choco'));
@@ -43,6 +45,8 @@ iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocola
   });
 }
 
+
+//install selected
 function installPackages(packageNames, sendLog) {
   if (!Array.isArray(packageNames)) {
     return log(`❌ ERROR: Expected array but got ${typeof packageNames}`, sendLog);

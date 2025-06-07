@@ -1,0 +1,170 @@
+
+===== ./main.js =====
+const { app, BrowserWindow, ipcMain } = require('electron');
+const path = require('path');
+const { installPackages } = require('./install');
+
+function createWindow() {
+  const win = new BrowserWindow({
+    width: 800,
+    height: 600,
+    webPreferences: {
+      preload: path.join(__dirname, 'preload.js'),
+      contextIsolation: true,
+      nodeIntegration: false
+    }
+  });
+
+  win.loadFile('index.html');
+}
+
+app.whenReady().then(() => {
+  createWindow();
+
+ipcMain.on('install-packages', (event, { packages, enableLog }) => {
+  installPackages(packages, enableLog ? (msg) => event.sender.send('install-log', msg) : null);
+});
+
+  app.on('activate', () => {
+    if (BrowserWindow.getAllWindows().length === 0) createWindow();
+  });
+});
+
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') app.quit();
+});
+
+===== ./preload.js =====
+const { contextBridge, ipcRenderer } = require('electron');
+
+contextBridge.exposeInMainWorld('electronAPI', {
+  installPackages: (data) => ipcRenderer.send('install-packages', data),
+  onLog: (callback) => ipcRenderer.on('install-log', (_, msg) => callback(msg))
+});
+
+===== ./renderer.js =====
+function installSelected() {
+  const selected = Array.from(document.querySelectorAll('input[type="checkbox"]:checked'))
+    .map(cb => cb.value);
+
+  if (selected.length === 0) {
+    appendOutput('⚠️ No packages selected.');
+    return;
+  }
+
+  appendOutput(`🛠 Installing: ${selected.join(', ')}`);
+window.electronAPI.installPackages({
+  packages: selected,
+  enableLog: true,
+});
+}
+
+function installSelectedNoLog() {
+  const selected = Array.from(document.querySelectorAll('input[type="checkbox"]:checked'))
+    .map(cb => cb.value);
+
+  if (selected.length === 0) {
+    appendOutput('⚠️ No packages selected.');
+    return;
+  }
+
+  appendOutput(`🧪 Running without logging: ${selected.join(', ')}`);
+  window.electronAPI.installPackages(selected, false);
+}
+
+function appendOutput(msg) {
+  const outputDiv = document.getElementById('output');
+  const line = document.createElement('pre');
+  line.textContent = msg;
+  outputDiv.appendChild(line);
+}
+
+window.electronAPI.onLog((msg) => {
+  appendOutput(msg);
+});
+
+===== ./index.html =====
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>New User Setup</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Install Programs</h1>
+
+    <div class="package-option">
+      <label><input type="checkbox" value="googlechrome"> Google Chrome</label>
+    </div>
+    <div class="package-option">
+      <label><input type="checkbox" value="vscode"> Visual Studio Code</label>
+    </div>
+    <div class="package-option">
+      <label><input type="checkbox" value="slack"> Slack</label>
+    </div>
+
+    <button onclick="installSelected()">Install Selected</button>
+    <button onclick="installSelectedNoLog()">Run Without Logging</button>
+
+    <div id="output"></div>
+
+    <script src="renderer.js"></script>
+  </div>
+</body>
+</html>
+
+===== ./styles.css =====
+<style>
+  body {
+    margin: 0;
+    padding: 2rem;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #ffffff; /* white background */
+    color: #222;
+  }
+
+  h1 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .container {
+    max-width: 600px;
+    margin: 0 auto;
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05); /* lighter shadow for a clean look */
+  }
+
+  .package-option {
+    margin-bottom: 1rem;
+  }
+
+  button {
+    margin-top: 1rem;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    background-color: #f57c00; /* orange primary button */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background-color: #e06b00; /* darker orange on hover */
+  }
+
+#output {
+  border: 1px solid #ccc;
+  padding: 10px;
+  height: 300px;
+  overflow-y: auto;
+  font-family: monospace;
+  background: #f9f9f9;
+  margin-top: 20px;
+}
+</style>

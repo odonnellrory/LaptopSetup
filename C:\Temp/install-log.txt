@@ -1,0 +1,15 @@
+[2025-06-07T21:37:05.391Z] 🛠 Installing: googlechrome
+[2025-06-07T21:37:05.419Z] 🔧 Installing Chocolatey...
+[2025-06-07T21:37:05.424Z] 
+[2025-06-07T21:37:05.424Z] /bin/sh: line 1: powershell: command not found
+
+[2025-06-07T21:37:05.424Z] ❌ Chocolatey install failed: Command failed: powershell -ExecutionPolicy Bypass -File "C:\Temp/install-choco.ps1"
+/bin/sh: line 1: powershell: command not found
+
+[2025-06-07T21:37:05.424Z] Running command: powershell -ExecutionPolicy Bypass -File "C:\Temp/setup.ps1"
+[2025-06-07T21:37:05.429Z] ERROR:
+/bin/sh: line 1: powershell: command not found
+
+[2025-06-07T21:37:05.429Z] ❌ INSTALL FAILED: Command failed: powershell -ExecutionPolicy Bypass -File "C:\Temp/setup.ps1"
+/bin/sh: line 1: powershell: command not found
+
