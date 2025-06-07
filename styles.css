@@ -1,52 +1,133 @@
-<style>
-  body {
-    margin: 0;
-    padding: 2rem;
-    font-family: 'Segoe UI', sans-serif;
-    background-color: #ffffff; /* white background */
-    color: #222;
-  }
-
-  h1 {
-    font-size: 2rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .container {
-    max-width: 600px;
-    margin: 0 auto;
-    background: white;
-    padding: 2rem;
-    border-radius: 8px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.05); /* lighter shadow for a clean look */
-  }
-
-  .package-option {
-    margin-bottom: 1rem;
-  }
-
-  button {
-    margin-top: 1rem;
-    padding: 0.75rem 1.5rem;
-    font-size: 1rem;
-    background-color: #f57c00; /* orange primary button */
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-
-  button:hover {
-    background-color: #e06b00; /* darker orange on hover */
-  }
-
-#output {
-  border: 1px solid #ccc;
-  padding: 10px;
-  height: 300px;
-  overflow-y: auto;
-  font-family: monospace;
-  background: #f9f9f9;
-  margin-top: 20px;
+/* Reset & Base */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #0f172a;
+  color: #f1f5f9;
 }
-</style>
+
+/* Topbar */
+.topbar {
+  background-color: #1e293b;
+  padding: 20px 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.branding {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.topbar h1 {
+  font-size: 24px;
+  margin: 0;
+  color: #38bdf8;
+}
+
+.topbar h2 {
+  font-size: 18px;
+  color: #cbd5e1;
+  margin: 0;
+}
+
+.logo {
+  height: 40px;
+  width: 40px;
+}
+
+/* Container */
+.container {
+  padding: 30px;
+  max-width: 900px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+/* Install Panel */
+.install-panel {
+  background-color: #1e293b;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(15, 23, 42, 0.5);
+}
+
+.install-panel h3 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  font-size: 20px;
+  color: #93c5fd;
+}
+
+.package-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.package-grid label {
+  background-color: #334155;
+  padding: 12px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.package-grid input[type="checkbox"] {
+  accent-color: #38bdf8;
+}
+
+/* Buttons */
+.buttons {
+  display: flex;
+  gap: 15px;
+}
+
+button {
+  background-color: #38bdf8;
+  border: none;
+  color: #0f172a;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s ease-in-out;
+}
+
+button:hover {
+  background-color: #0ea5e9;
+}
+
+/* Output Panel */
+.output-panel {
+  background-color: #1e293b;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(15, 23, 42, 0.5);
+}
+
+.output-panel h3 {
+  margin-top: 0;
+  font-size: 20px;
+  color: #93c5fd;
+}
+
+.output-log {
+  background-color: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  padding: 15px;
+  font-family: monospace;
+  max-height: 250px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+}

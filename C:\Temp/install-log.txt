@@ -13,3 +13,18 @@
 [2025-06-07T21:37:05.429Z] ❌ INSTALL FAILED: Command failed: powershell -ExecutionPolicy Bypass -File "C:\Temp/setup.ps1"
 /bin/sh: line 1: powershell: command not found
 
+[2025-06-07T22:53:15.553Z] 🛠 Installing: 7zip
+[2025-06-07T22:53:15.579Z] 🔧 Installing Chocolatey...
+[2025-06-07T22:53:15.586Z] 
+[2025-06-07T22:53:15.586Z] /bin/sh: line 1: powershell: command not found
+
+[2025-06-07T22:53:15.586Z] ❌ Chocolatey install failed: Command failed: powershell -ExecutionPolicy Bypass -File "C:\Temp/install-choco.ps1"
+/bin/sh: line 1: powershell: command not found
+
+[2025-06-07T22:53:15.587Z] Running command: powershell -ExecutionPolicy Bypass -File "C:\Temp/setup.ps1"
+[2025-06-07T22:53:15.592Z] ERROR:
+/bin/sh: line 1: powershell: command not found
+
+[2025-06-07T22:53:15.592Z] ❌ INSTALL FAILED: Command failed: powershell -ExecutionPolicy Bypass -File "C:\Temp/setup.ps1"
+/bin/sh: line 1: powershell: command not found
+

@@ -1,37 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>New User Setup</title>
+  <meta charset="UTF-8" />
+  <title>Creative Networks - New User Setup</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div class="container">
-    <h1>Install Programs</h1>
-
-    <div class="package-option">
-      <label><input type="checkbox" value="googlechrome"> Google Chrome</label>
+  <header class="topbar">
+    <div class="branding">
+      <img src="assets/logo.png" alt="Creative Networks" class="logo" />
+      <h1>Creative Networks</h1>
     </div>
-    <div class="package-option">
-      <label><input type="checkbox" value="vscode"> Visual Studio Code</label>
-    </div>
-    <div class="package-option">
-      <label><input type="checkbox" value="slack"> Slack</label>
-    </div>
-    <div class="package-option">
-      <label><input type="checkbox" value="7zip"> 7-Zip</label>
-    </div>
-    <div class="package-option">
-      <label><input type="checkbox" value="notepadplusplus"> Notepad++</label>
-    </div>
+    <h2>New User Setup Tool</h2>
+  </header>
 
+  <main class="container">
+    <section class="install-panel">
+      <h3>Select Software to Install</h3>
+      <div class="package-grid">
+        <label><input type="checkbox" value="googlechrome" /> Google Chrome</label>
+        <label><input type="checkbox" value="vscode" /> Visual Studio Code</label>
+        <label><input type="checkbox" value="slack" /> Slack</label>
+        <label><input type="checkbox" value="7zip" /> 7-Zip</label>
+        <label><input type="checkbox" value="notepadplusplus" /> Notepad++</label>
+      </div>
 
-    <button onclick="installSelected()">Install Selected</button>
-    <button onclick="installSelectedNoLog()">Run Without Logging</button>
+      <div class="buttons">
+        <button onclick="installSelected()">Install Selected</button>
+        <button onclick="installSelectedNoLog()">Run Without Logging</button>
+      </div>
+    </section>
 
-    <div id="output"></div>
+    <section class="output-panel">
+      <h3>Installation Output</h3>
+      <div id="output" class="output-log"></div>
+    </section>
+  </main>
 
-    <script src="renderer.js"></script>
-  </div>
+  <script src="renderer.js"></script>
 </body>
 </html>
