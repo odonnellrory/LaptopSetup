@@ -1,22 +1,39 @@
-
-// No require needed — uses exposed API
 function installSelected() {
-  console.log("🚀 Install button clicked");
+  const selected = Array.from(document.querySelectorAll('input[type="checkbox"]:checked'))
+    .map(cb => cb.value);
 
-  const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
-  const packages = Array.from(checkboxes).map(cb => cb.value);
+  if (selected.length === 0) {
+    appendOutput('⚠️ No packages selected.');
+    return;
+  }
 
-  console.log("Packages selected:", packages);
-
-  window.electronAPI.installPackages(packages);
+  appendOutput(`🛠 Installing: ${selected.join(', ')}`);
+window.electronAPI.installPackages({
+  packages: selected,
+  enableLog: true,
+});
 }
 
-window.electronAPI.onLog((message) => {
-  const output = document.getElementById('output');
-  const line = document.createElement('div');
-  line.textContent = message;
-  output.appendChild(line);
-  output.scrollTop = output.scrollHeight;
-});
+function installSelectedNoLog() {
+  const selected = Array.from(document.querySelectorAll('input[type="checkbox"]:checked'))
+    .map(cb => cb.value);
 
-window.installSelected = installSelected;
+  if (selected.length === 0) {
+    appendOutput('⚠️ No packages selected.');
+    return;
+  }
+
+  appendOutput(`🧪 Running without logging: ${selected.join(', ')}`);
+  window.electronAPI.installPackages(selected, false);
+}
+
+function appendOutput(msg) {
+  const outputDiv = document.getElementById('output');
+  const line = document.createElement('pre');
+  line.textContent = msg;
+  outputDiv.appendChild(line);
+}
+
+window.electronAPI.onLog((msg) => {
+  appendOutput(msg);
+});

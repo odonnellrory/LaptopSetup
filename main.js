@@ -1,6 +1,6 @@
-const { ipcMain, app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
-const { installPackages } = require('./scripts/install')
+const { installPackages } = require('./install');
 
 function createWindow() {
   const win = new BrowserWindow({
@@ -16,23 +16,18 @@ function createWindow() {
   win.loadFile('index.html');
 }
 
-//Setup app life cycle
 app.whenReady().then(() => {
   createWindow();
+
+ipcMain.on('install-packages', (event, { packages, enableLog }) => {
+  installPackages(packages, enableLog ? (msg) => event.sender.send('install-log', msg) : null);
+});
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
   });
 });
 
-//IPC handling 
-ipcMain.on('install-packages', (event, packages) => {
-  installPackages(packages, (logMessage) => {
-    event.sender.send('install-log', logMessage); // Send each log line to renderer
-  });
-});
-
-//close
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit();
 });
