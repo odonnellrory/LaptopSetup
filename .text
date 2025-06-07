@@ -1,0 +1,24 @@
+#!/bin/bash
+
+OUTFILE="bundle.txt"
+> "$OUTFILE"
+
+# Manually specify folders/files you care about
+FILES=(
+  "./main.js"
+  "./preload.js"
+  "./renderer.js"
+  "./index.html"
+  "./styles.css"
+  "./scripts/install.js"
+)
+
+for file in "${FILES[@]}"; do
+  if [ -f "$file" ]; then
+    echo -e "\n===== $file =====" >> "$OUTFILE"
+    cat "$file" >> "$OUTFILE"
+  fi
+done
+
+echo "✅ Clean bundle created: $OUTFILE"
+

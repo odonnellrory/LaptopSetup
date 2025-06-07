@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>New User Setup</title>
+  <link rel="stylesheet" href="styles.css" />
+  </head>
+<body>
+  <div class="container">
+    <h1>Install Programs</h1>
+
+    <div class="package-option">
+      <label><input type="checkbox" value="googlechrome"> Google Chrome</label>
+    </div>
+
+    <div class="package-option">
+      <label><input type="checkbox" value="vscode"> Visual Studio Code</label>
+    </div>
+
+    <div class="package-option">
+      <label><input type="checkbox" value="slack"> Slack</label>
+    </div>
+
+    <button onclick="installSelected()">Install Selected</button>
+
+    <div id="output"></div>
+  </div>
+
+  <script src="renderer.js"></script>
+</body>
+</html>
+
+  
