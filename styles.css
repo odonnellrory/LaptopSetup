@@ -25,12 +25,11 @@ body {
 .topbar h1 {
   font-size: 24px;
   margin: 0;
-  color: #f97316; /* Orange */
-}
+  color: #f97316;}
 
 .topbar h2 {
   font-size: 18px;
-  color: #facc15; /* Soft yellow for subheader */
+  color: #fdba74;
   margin: 0;
 }
 
@@ -61,8 +60,7 @@ body {
   margin-top: 0;
   margin-bottom: 15px;
   font-size: 20px;
-  color: #fdba74; /* Light orange */
-}
+  color: #fdba74;}
 
 .package-grid {
   display: grid;

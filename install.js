@@ -2,93 +2,114 @@ const { exec } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
-//find temp folder
 const tempDir = process.env.TEMP || 'C:\\Temp';
+const logPath = path.join(tempDir, 'install-log.txt');
+const chocoInstallScriptUrl = 'https://community.chocolatey.org/install.ps1';
+
 fs.mkdirSync(tempDir, { recursive: true });
 
-//create log file
-const logPath = path.join(tempDir, 'install-log.txt');
-function log(msg, sendLog, logStream) {
-  const line = `[${new Date().toISOString()}] ${msg}`;
-  if (logStream) logStream.write(line + '\n');
-  if (sendLog) sendLog(line);
+
+//      --- SETUP ---
+// Logs messages with timestamp, optionally to a file and a real-time callback.
+function logMessage(message, sendLog, logStream) {
+  const timestamped = `[${new Date().toISOString()}] ${message}`;
+  if (logStream) logStream.write(timestamped + '\n');
+  if (sendLog) sendLog(timestamped);
 }
 
-//if no choco install choco
+// Executes a shell command and logs the results.
+
+function runCommand(command, sendLog, logStream, onComplete) {
+  logMessage(`Running command: ${command}`, sendLog, logStream);
+  exec(command, (err, stdout, stderr) => {
+    if (stdout) logMessage(`OUTPUT:\n${stdout}`, sendLog, logStream);
+    if (stderr) logMessage(`ERROR:\n${stderr}`, sendLog, logStream);
+    if (err) {
+      logMessage(`Command failed: ${err.message}`, sendLog, logStream);
+    }
+    onComplete(err);
+  });
+}
+
+
+// Writes a PowerShell script to a file.
+
+function writePowerShellScript(filename, content) {
+  const filePath = path.join(tempDir, filename);
+  fs.writeFileSync(filePath, content);
+  return filePath;
+}
+
+//      ---  CHOCO CHECK ---
+// Checks if Chocolatey is installed.
+
 function isChocolateyInstalled(callback) {
   exec('where choco', (err, stdout) => {
     callback(!err && stdout.toLowerCase().includes('choco'));
   });
 }
 
-function installChocolatey(sendLog, callback, logStream) {
-  const script = `
+
+// Downloads and installs Chocolatey via PowerShell.
+
+function installChocolatey(sendLog, logStream, callback) {
+  logMessage('Installing Chocolatey...', sendLog, logStream);
+
+  const installScript = `
 Set-ExecutionPolicy Bypass -Scope Process -Force
 [System.Net.ServicePointManager]::SecurityProtocol = 3072
-iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
-`;
+iex ((New-Object System.Net.WebClient).DownloadString('${chocoInstallScriptUrl}'))
+  `;
+  const scriptPath = writePowerShellScript('install-choco.ps1', installScript);
 
-  const psPath = path.join(tempDir, 'install-choco.ps1');
-  fs.writeFileSync(psPath, script);
-
-  log('🔧 Installing Chocolatey...', sendLog, logStream);
-
-  exec(`powershell -ExecutionPolicy Bypass -File "${psPath}"`, (err, stdout, stderr) => {
-    log(stdout, sendLog, logStream);
-    log(stderr, sendLog, logStream);
-    if (err) {
-      log('❌ Chocolatey install failed: ' + err.message, sendLog, logStream);
-    } else {
-      log('✅ Chocolatey installed.', sendLog, logStream);
+  runCommand(`powershell -ExecutionPolicy Bypass -File "${scriptPath}"`, sendLog, logStream, (err) => {
+    if (!err) {
+      logMessage('Chocolatey installed.', sendLog, logStream);
     }
     callback();
   });
 }
 
 
-//install selected
+// Generates the PowerShell script to install packages using Chocolatey.
+
+function generateInstallScript(packageNames) {
+  const commands = [
+    `Start-Transcript -Path "${path.join(tempDir, 'choco-debug.log')}"`,
+    `$env:Path += ";$env:ChocolateyInstall\\bin"`,
+    ...packageNames.map(pkg => `choco install ${pkg} -y --force`),
+    `choco list --local-only`,
+    `Stop-Transcript`
+  ];
+  return commands.join('\n');
+}
+
+
+// Installs the selected packages.
+
 function installPackages(packageNames, sendLog) {
   if (!Array.isArray(packageNames)) {
-    return log(`❌ ERROR: Expected array but got ${typeof packageNames}`, sendLog);
+    return logMessage(`ERROR: Expected array but got ${typeof packageNames}`, sendLog);
   }
 
   const logStream = sendLog ? fs.createWriteStream(logPath, { flags: 'a' }) : null;
-  log(`🛠 Installing: ${packageNames.join(', ')}`, sendLog, logStream);
+  logMessage(`Packages to install: ${packageNames.join(', ')}`, sendLog, logStream);
 
   isChocolateyInstalled((exists) => {
-    const doInstall = () => {
-      const script = `
-Start-Transcript -Path "${path.join(tempDir, 'choco-debug.log')}"
-$env:Path += ";$env:ChocolateyInstall\\bin"
-${packageNames.map(p => `choco install ${p} -y`).join('\n')}
-Stop-Transcript
-`;
-
-      const psPath = path.join(tempDir, 'setup.ps1');
-      fs.writeFileSync(psPath, script);
-
-      const cmd = `powershell -ExecutionPolicy Bypass -File "${psPath}"`;
-      log(`Running command: ${cmd}`, sendLog, logStream);
-
-      exec(cmd, (err, stdout, stderr) => {
-        if (stdout) log(`OUTPUT:\n${stdout}`, sendLog, logStream);
-        if (stderr) log(`ERROR:\n${stderr}`, sendLog, logStream);
-
-        if (err) {
-          log(`❌ INSTALL FAILED: ${err.message}`, sendLog, logStream);
-        } else {
-          log('✅ Installation completed successfully.', sendLog, logStream);
-        }
-
+    const proceedWithInstallation = () => {
+      const installScript = generateInstallScript(packageNames);
+      const scriptPath = writePowerShellScript('setup.ps1', installScript);
+      runCommand(`powershell -ExecutionPolicy Bypass -File "${scriptPath}"`, sendLog, logStream, () => {
+        logMessage('Installation process finished.', sendLog, logStream);
         if (logStream) logStream.end();
       });
     };
 
     if (!exists) {
-      installChocolatey(sendLog, doInstall, logStream);
+      installChocolatey(sendLog, logStream, proceedWithInstallation);
     } else {
-      log('🍫 Chocolatey already installed.', sendLog, logStream);
-      doInstall();
+      logMessage('Chocolatey is already installed.', sendLog, logStream);
+      proceedWithInstallation();
     }
   });
 }

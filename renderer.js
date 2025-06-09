@@ -3,11 +3,11 @@ function installSelected() {
     .map(cb => cb.value);
 
   if (selected.length === 0) {
-    appendOutput('⚠️ No packages selected.');
+    appendOutput('No packages selected.');
     return;
   }
 
-  appendOutput(`🛠 Installing: ${selected.join(', ')}`);
+  appendOutput(`Installing: ${selected.join(', ')}`);
 window.electronAPI.installPackages({
   packages: selected,
   enableLog: true,
@@ -19,11 +19,11 @@ function installSelectedNoLog() {
     .map(cb => cb.value);
 
   if (selected.length === 0) {
-    appendOutput('⚠️ No packages selected.');
+    appendOutput('No packages selected.');
     return;
   }
 
-  appendOutput(`🧪 Running without logging: ${selected.join(', ')}`);
+  appendOutput(`Running without logging: ${selected.join(', ')}`);
   window.electronAPI.installPackages(selected, false);
 }
 
