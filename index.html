@@ -11,7 +11,12 @@
       <img src="assets/logo.png" alt="Creative Networks" class="logo" />
       <h1>Creative Networks</h1>
     </div>
-    <h2>Device Setup Tool</h2>
+
+      <div class="custom-package hidden">
+       <label for="customPackage"></label>
+       <input type="text" name="customPackage" placeholder="Choco...">
+      </div>
+<button id="toggleAdvanced" title="Advanced Options"></button>
   </header>
 
   <main class="container">
@@ -29,10 +34,6 @@
         <label><input type="checkbox" value="office365business" /> Microsoft 365 (Business)</label>
       </div>
 
-      <div class="custom-package">
-       <label for="customPackage">Choco</label>
-       <input type="text" name="customPackage">
-      </div>
 
       <div class="buttons">
         <button onclick="installSelected()">Install Selected</button>

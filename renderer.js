@@ -10,6 +10,8 @@ function installSelected() {
     selected.push(customInput)
   }
 
+// self explanatory
+
   if (selected.length === 0) {
     appendOutput('No packages selected.');
     return;
@@ -42,6 +44,11 @@ function appendOutput(msg) {
   outputDiv.appendChild(line);
 }
 
+
+document.getElementById('toggleAdvanced').addEventListener('click', () => {
+  const customDiv = document.querySelector('.custom-package');
+  customDiv.classList.toggle('hidden');
+});
 window.electronAPI.onLog((msg) => {
   appendOutput(msg);
 });

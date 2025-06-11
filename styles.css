@@ -130,22 +130,25 @@ button:hover {
   white-space: pre-wrap;
 }
 
-.custom-package {
-  margin-top: 20px;
-}
-
-.custom-package label {
-  display: block;
-  margin-bottom: 5px;
-  color: #f1f5f9;
-}
-
-.custom-package input {
-  width: 30%;
-  margin-bottom: 30px;
-  padding: 10px;
-  border-radius: 6px;
-  border: none;
+/* Circular Advanced Button */
+#toggleAdvanced {
   background-color: #334155;
   color: #f1f5f9;
+  border: none;
+  border-radius: 50%;
+  font-size: 18px;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+#toggleAdvanced:hover {
+  background-color: #f97316;
+  color: #0f172a;
+}
+
+/* Hidden toggle */
+.hidden {
+  display: none;
 }
