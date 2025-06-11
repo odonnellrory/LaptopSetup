@@ -1,6 +1,14 @@
 function installSelected() {
+
+  // takes all the ticked boxes and sticks em in a box innit3
   const selected = Array.from(document.querySelectorAll('input[type="checkbox"]:checked'))
     .map(cb => cb.value);
+
+  // the search bar gets special treatment
+  const customInput = document.querySelector('input[name="customPackage"]').value.trim();
+  if (customInput) {
+    selected.push(customInput)
+  }
 
   if (selected.length === 0) {
     appendOutput('No packages selected.');

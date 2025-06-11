@@ -40,7 +40,7 @@ function writePowerShellScript(filename, content) {
   return filePath;
 }
 
-//      ---  CHOCO CHECK ---
+//      ---  CHOCOCOLATEY ---
 // Checks if Chocolatey is installed.
 
 function isChocolateyInstalled(callback) {
@@ -72,6 +72,7 @@ iex ((New-Object System.Net.WebClient).DownloadString('${chocoInstallScriptUrl}'
 
 
 // Generates the PowerShell script to install packages using Chocolatey.
+// It writes a log file to the %temp% folder
 
 function generateInstallScript(packageNames) {
   const commands = [

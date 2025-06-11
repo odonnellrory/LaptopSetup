@@ -129,3 +129,23 @@ button:hover {
   overflow-y: auto;
   white-space: pre-wrap;
 }
+
+.custom-package {
+  margin-top: 20px;
+}
+
+.custom-package label {
+  display: block;
+  margin-bottom: 5px;
+  color: #f1f5f9;
+}
+
+.custom-package input {
+  width: 30%;
+  margin-bottom: 30px;
+  padding: 10px;
+  border-radius: 6px;
+  border: none;
+  background-color: #334155;
+  color: #f1f5f9;
+}
